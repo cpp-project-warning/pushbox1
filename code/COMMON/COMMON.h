@@ -54,7 +54,7 @@ public:
 	Map();
 	Map(int bn, int w[MAXN][MAXN], position des[]);
 	~Map();
-	std::set<position> get_destination();
+	std::set<position>& get_destination();
 	//int** get_wall();
 	void get_wall(int w[][MAXN]);
 	void set_box_number(int bx);
@@ -64,20 +64,6 @@ public:
 	bool if_wall(int x, int y);
 };
 
-class Player
-{
-private:
-	position player;
-
-public:
-	Player();
-	Player(position p);
-	position get_position() const;
-	void set_position(position p);
-	//传入移动方向，判断能否进行移动（对应方向有墙不行，或有箱子且箱子后面还有东西不想）
-				void move_player(char c);
-};
-
 class Box
 {
 private:
@@ -85,14 +71,31 @@ private:
 
 public:
 	Box(position b);
-	position get_position() const;
+	position& get_position();
 	void set_position(position p);
 	//对应方向有墙返回1，没有返回0
-	bool check_around_if_wall(char c, Map game_map) throw(int);
+	bool check_around_if_wall(char c, Map game_map);
 	//'n'不移动，其他情况朝对应方向移动
-	void move_box(char c, Map game_map);
+	void move_box(char c);
+	bool if_box(position p);
 	bool operator < (const Box & rhs ) const;
 	bool operator == (const Box & rhs) const;
+};
+
+class Player
+{
+private:
+	position player;
+	direction dir;
+
+public:
+	Player();
+	Player(position p);
+	position& get_position();
+	void set_position(position p);
+	bool move_player(direction dir, std::set<Box>& all_box);
+	void set_direction(direction dir);
+	direction& get_direction();
 };
 
 #endif
