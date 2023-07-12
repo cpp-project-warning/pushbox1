@@ -22,7 +22,7 @@ MainWindow::MainWindow(QWidget* parent)
     roundLabel->setGeometry(0, 580, 100, 50);
     stepLabel->setGeometry(150, 580, 100, 50);
     roundLabel->setText(QString("第" + QString::number(round) + "关"));
-    stepLabel->setText(QString("移动次数：" + step));
+    stepLabel->setText(QString("移动次数：" + QString::number(step)));
 
     nextBtn = new QPushButton(QString("下一关"), this);
     restartBtn = new QPushButton(QString("重新开始"), this);
@@ -67,7 +67,7 @@ void MainWindow::setStep(std::shared_ptr<int> step) {
 
 void MainWindow::setIfsuccess(std::shared_ptr<bool> dosuccess) {
     if (*dosuccess) {
-
+        QMessageBox::information(this, "Congratulations!", "You win!");
     }
 }
 

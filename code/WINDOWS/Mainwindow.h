@@ -15,13 +15,9 @@
 #include <QtWidgets/QPushButton>  // 按钮类
 #include <QtWidgets/QLabel>  // 标签类
 #include <QtWidgets/QMessageBox>  // 消息框类
-#include <QtWidgets/QVBoxLayout>
-#include <QtWidgets/QHBoxLayout>
 #include <QtGUI/QPainter>
 #include <QtCore/QString>
-
-extern const int mapSize = 20;  // 地图大小
-extern const int roundNum = 5;  // 块大小
+#include <QtCore/QDebug>
 
 class MainWindow : public QMainWindow
 {
