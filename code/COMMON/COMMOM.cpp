@@ -1,6 +1,9 @@
 #include "COMMON.h"
-int current_map_count=1;
+
+int current_map_count = 1;
+
 int roundNum = 5;  // 块大小
+
 Map::Map()
 {
 
@@ -34,7 +37,7 @@ Map::~Map()
 
 }
 
-std::set<position> Map::get_destination()
+std::set<position>& Map::get_destination()
 {
 	return destination;
 }
@@ -116,16 +119,17 @@ bool Map::if_wall(int x, int y)
 
 Player::Player()
 {
-
+	dir = Down;
 }
 
 Player::Player(position p)
 {
 	player.x = p.x;
 	player.y = p.y;
+	dir = Down;
 }
 
-position Player::get_position() const
+position& Player::get_position()
 {
 	return player;
 }
@@ -135,9 +139,36 @@ void Player::set_position(position p)
 	player = p;
 }
 
-void Player::move_player(char c)
+bool Player::move_player(direction dir, std::set<Box>& all_box)
 {
+	bool if_move = false;
+	if(dir == Up)
+	{
 
+	}
+	else if(dir == Left)
+	{
+
+	}
+	else if(dir == Down)
+	{
+
+	}
+	else if(dir == Right)
+	{
+
+	}
+	return if_move;
+}
+
+void Player::set_direction(direction dir)
+{
+	this->dir = dir;
+}
+
+direction& Player::get_direction()
+{
+	return dir;
 }
 
 Box::Box(position b)
@@ -146,7 +177,7 @@ Box::Box(position b)
 	box.y = b.y;
 }
 
-position Box::get_position() const
+position& Box::get_position()
 {
 	return box;
 }
@@ -156,7 +187,7 @@ void Box::set_position(position p)
 	box = p;
 }
 
-bool Box::check_around_if_wall(char c, Map game_map) throw(int)
+bool Box::check_around_if_wall(char c, Map game_map)
 {
 	bool ans;
 	if(c == 'a')
@@ -175,16 +206,27 @@ bool Box::check_around_if_wall(char c, Map game_map) throw(int)
 	{
 		ans = game_map.if_wall(box.x+1, box.y);
 	}
-	else
-	{
-		throw(1);
-	}
 	return ans;
 }
 
-void Box::move_box(char c, Map game_map)
+void Box::move_box(char c)
 {
-	//std::cout << c << endl;
+	if(c == 'w')
+	{
+		box.y += 1;
+	}
+	else if(c == 'a')
+	{
+		box.x -= 1;
+	}
+	else if(c == 's')
+	{
+		box.y -= 1;
+	}
+	else if(c == 'd')
+	{
+		box.x += 1;
+	}
 }
 
 bool Box::operator < (const Box & rhs ) const
