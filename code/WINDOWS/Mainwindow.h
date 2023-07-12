@@ -1,8 +1,8 @@
+#pragma once
 
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include "../VIEWMODEL/ViewModel.h"
 #include "../COMMON/COMMON.h"
 
 #include <QtWidgets/QMainWindow>   // 主窗口类
@@ -15,18 +15,9 @@
 #include <QtWidgets/QPushButton>  // 按钮类
 #include <QtWidgets/QLabel>  // 标签类
 #include <QtWidgets/QMessageBox>  // 消息框类
-#include <QtWidgets/QVBoxLayout>
-#include <QtWidgets/QHBoxLayout>
 #include <QtGUI/QPainter>
 #include <QtCore/QString>
-
-#include <string>
-#include <map>
-#include <set>
-#include <vector>
-
-//extern const int mapSize = 20;  // 地图大小
-
+#include <QtCore/QDebug>
 
 class MainWindow : public QMainWindow
 {
@@ -35,14 +26,16 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget* parent = 0);
     ~MainWindow();
-    void LoadGame();
+    void draw();
+    
 
     direction getMovedir();
     int getRoundchange();
-    void setviewMap(int map[MAXN][MAXN]);
-    void resetMove();
-    void resetRoundchange();
+    void setviewMap(int **map);
     void setRound(std::shared_ptr<int> round);
+    void setStep(std::shared_ptr<int> step);
+    void setIfsuccess(std::shared_ptr<bool> dosuccess);
+    void setDirection(std::shared_ptr<direction> d);
 
 private slots:
     void onNextBtnClicked();
@@ -50,33 +43,15 @@ private slots:
     void onPreBtnClicked();
 
 private:
-
+    void paintEvent(QPaintEvent*);
     void keyPressEvent(QKeyEvent* e);
-
-    QGraphicsScene* scene = new QGraphicsScene(this);
-    QGraphicsView* view = new QGraphicsView(scene, this);
-
-
-    void setDirection(direction d = Down);
-
-    bool isSuccessful();
-    void checkGame();
     
-
     int round;
     int step;
     const QString title = "推箱子游戏";
     direction move = Nomove;
     int roundchange = 2;
-    int viewMap[MAXN][MAXN];
-    int box_num;
-
-
-    QGraphicsPixmapItem* mapItem[20][20];
-    QGraphicsPixmapItem* wallItem[20][20];
-    QGraphicsPixmapItem* playerItem;
-    QGraphicsPixmapItem* boxItem[10];
-    QGraphicsPixmapItem* aimItem[10];
+    int** viewMap;
 
     QPixmap wallPixmap;
     QPixmap aimPixmap;
