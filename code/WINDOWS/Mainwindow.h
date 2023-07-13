@@ -52,12 +52,10 @@ private slots:
 private:
     void paintEvent(QPaintEvent*);
     void keyPressEvent(QKeyEvent* e);
-    
+
     int round;
     int step;
     const QString title = "推箱子游戏";
-    direction move = Nomove;
-    int roundchange = 2;
     int viewMap[MAXN][MAXN];
 
     std::shared_ptr<ICommandBase>m_cmdMove;
@@ -75,12 +73,12 @@ private:
     QPixmap leftPixmap;
     QPixmap playerPixmap;
 
-    QLabel* roundLabel;
-    QLabel* stepLabel;
+    QLabel roundLabel;
+    QLabel stepLabel;
 
-    QPushButton* nextBtn;
-    QPushButton* restartBtn;
-    QPushButton* preBtn;
+    QPushButton nextBtn;
+    QPushButton restartBtn;
+    QPushButton preBtn;
 };
 
 
