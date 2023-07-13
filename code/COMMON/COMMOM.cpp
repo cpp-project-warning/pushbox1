@@ -1,8 +1,8 @@
 #include "COMMON.h"
 
-int current_map_count = 1;
+int level = 1;
 
-int roundNum = 5;  // 块大小
+int level_num = 5; //总关卡数
 
 Map::Map()
 {
@@ -139,26 +139,100 @@ void Player::set_position(position p)
 	player = p;
 }
 
-bool Player::move_player(direction dir, std::set<Box>& all_box)
+//分三种情况，空地，墙，箱子
+bool Player::move_player(direction dir, std::set<Box>& all_box, Map m)
 {
-	bool if_move = false;
+	position player_before = player;
+	position expect_pos;
 	if(dir == Up)
 	{
-
+		expect_pos.x = player.x;
+		expect_pos.y = player.y + 1;
 	}
 	else if(dir == Left)
 	{
-
+		expect_pos.x = player.x - 1;
+		expect_pos.y = player.y; 
 	}
 	else if(dir == Down)
 	{
-
+		expect_pos.x = player.x;
+		expect_pos.y = player.y - 1;
 	}
 	else if(dir == Right)
 	{
-
+		expect_pos.x = player.x + 1;
+		expect_pos.y = player.y; 
 	}
-	return if_move;
+	bool if_box = false;
+	if(!m.if_wall(expect_pos.x, expect_pos.y)) //目标移动位置没有墙
+	{
+		for(auto a : all_box)
+		{
+			if(a.get_position() == expect_pos) //目标移动位置有箱子
+			{
+				if_box = true;
+			}
+		}
+		if(if_box) //目标位置是箱子
+		{
+			position expect_pos_1;
+			if(dir == Up)
+			{
+				expect_pos_1.x = expect_pos.x;
+				expect_pos_1.y = expect_pos.y + 1;
+			}
+			else if(dir == Left)
+			{
+				expect_pos_1.x = expect_pos.x - 1;
+				expect_pos_1.y = expect_pos.y;
+			}
+			else if(dir == Down)
+			{
+				expect_pos_1.x = expect_pos.x;
+				expect_pos_1.y = expect_pos.y - 1;
+			}
+			else if(dir == Right)
+			{
+				expect_pos_1.x = expect_pos.x + 1;
+				expect_pos_1.y = expect_pos.y;
+			}
+			bool if_box_1 = false;
+			if(!m.if_wall(expect_pos_1.x, expect_pos_1.y)) //箱子前面不是墙
+			{
+				for(auto a : all_box)
+				{
+					if(a.get_position() == expect_pos_1) //箱子前面是箱子
+					{
+						if_box_1 = true;
+					}
+				}
+				if(!if_box_1) //箱子前面不是箱子
+				{
+					for(auto a& : all_box) //找到需要推动的箱子
+					{
+						if(a.get_position() == expect_pos)
+						{
+							a.move_box(dir);
+							player = expect_pos;
+						}
+					}
+				}
+			}
+		}
+		else //目标移动位置是空地
+		{
+			player = expect_pos;
+		}
+	}
+	if(player_before == player)
+	{
+		return false;
+	}
+	else
+	{
+		return true;
+	}
 }
 
 void Player::set_direction(direction dir)
@@ -177,7 +251,7 @@ Box::Box(position b)
 	box.y = b.y;
 }
 
-position& Box::get_position()
+position& Box::get_position() const
 {
 	return box;
 }
@@ -209,21 +283,21 @@ bool Box::check_around_if_wall(char c, Map game_map)
 	return ans;
 }
 
-void Box::move_box(char c)
+void Box::move_box(direction dir)
 {
-	if(c == 'w')
+	if(dir == Up)
 	{
 		box.y += 1;
 	}
-	else if(c == 'a')
+	else if(dir == Left)
 	{
 		box.x -= 1;
 	}
-	else if(c == 's')
+	else if(dir == Down)
 	{
 		box.y -= 1;
 	}
-	else if(c == 'd')
+	else if(dir == Right)
 	{
 		box.x += 1;
 	}

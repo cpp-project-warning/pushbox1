@@ -2,6 +2,7 @@
 #define _COMMON_H_
 
 #include "push_box_base.h"
+#include "etlbase.h"
 
 #define MAXN 20
 
@@ -71,12 +72,12 @@ private:
 
 public:
 	Box(position b);
-	position& get_position();
+	position& get_position() const;
 	void set_position(position p);
 	//对应方向有墙返回1，没有返回0
 	bool check_around_if_wall(char c, Map game_map);
 	//'n'不移动，其他情况朝对应方向移动
-	void move_box(char c);
+	void move_box(direction dir);
 	bool if_box(position p);
 	bool operator < (const Box & rhs ) const;
 	bool operator == (const Box & rhs) const;
@@ -93,7 +94,7 @@ public:
 	Player(position p);
 	position& get_position();
 	void set_position(position p);
-	bool move_player(direction dir, std::set<Box>& all_box);
+	bool move_player(direction dir, std::set<Box>& all_box, Map m);
 	void set_direction(direction dir);
 	direction& get_direction();
 };
