@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "precomp.h"
+#include "../../COMMON/etlbase.h"
 
 #include "MainWindowPropertySink.h"
 
@@ -8,17 +8,14 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 
-MainWindowPropertySink::MainWindowPropertySink(MainWindow* pW) throw() : m_pW(pW)
-{
+MainWindowPropertySink::MainWindowPropertySink(MainWindow* pW) throw() : m_pW(pW){
+
 }
 
 void MainWindowPropertySink::OnPropertyChanged(const std::string& str)
 {
-	if( str == "gray_data" ) {
-		m_pW->m_imageCtrlOriginal.UpdateScroll();
-	}
-	else if( str == "color_data" ) {
-		m_pW->m_imageCtrlProcess.UpdateScroll();
+	if( str == "doSuccess" ) {
+		m_pW->popsuccess();
 	}
 }
 
