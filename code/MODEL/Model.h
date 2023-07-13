@@ -7,7 +7,7 @@ class Map;
 class Player;
 class Box;
 
-class Model
+class Model : public Proxy_PropertyNotification<Model>
 {
 private:
 	int count_step;
