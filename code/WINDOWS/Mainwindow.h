@@ -38,7 +38,7 @@ public:
     std::shared_ptr<IPropertyNotification> get_PropertySink() noexcept;
     std::shared_ptr<ICommandNotification> get_CommandSink() noexcept;
 
-    void set_ViewMap(std::shared_ptr<int[MAXN * MAXN]> ViewMap);
+    void set_ViewMap(std::shared_ptr<int[]> ViewMap);
     //void set_Level(std::shared_ptr<int> round);
     void set_Step(std::shared_ptr<int> step);
     void set_Orientation(std::shared_ptr<direction> d);
@@ -57,7 +57,7 @@ private:
     //std::shared_ptr<int> round;
     std::shared_ptr<int> step;
     std::shared_ptr<direction> dir;
-    std::shared_ptr<int[MAXN * MAXN]> viewMap;
+    std::shared_ptr<int[]> viewMap;
     //int viewMap[MAXN][MAXN];
     const QString title = "推箱子游戏";
 

@@ -2,14 +2,14 @@
 
 MainWindow::MainWindow(QWidget* parent)
     : QMainWindow(parent)
-    , blockPixmap("D:\\pushbox\\code\\img\\block.png")
-    , boxPixmap("D:\\pushbox\\code\\img\\box.png")
-    , wallPixmap("D:\\pushbox\\code\\img\\wall.png")
-    , aimPixmap("D:\\pushbox\\code\\img\\ball.png")
-    , upPixmap("D:\\pushbox\\code\\img\\up.png")
-    , downPixmap("D:\\pushbox\\code\\img\\down.png")
-    , rightPixmap("D:\\pushbox\\code\\img\\right.png")
-    , leftPixmap("D:\\pushbox\\code\\img\\left.png")
+    , blockPixmap("./img/block.png")
+    , boxPixmap("./img/box.png")
+    , wallPixmap("./img/wall.png")
+    , aimPixmap("./img/ball.png")
+    , upPixmap("./img/up.png")
+    , downPixmap("./img/down.png")
+    , rightPixmap("./img/right.png")
+    , leftPixmap("./img/left.png")
     , m_spCommandSink(std::make_shared<MainWindowCommandSink>(this))
     , m_spPropertySink(std::make_shared<MainWindowPropertySink>(this))
 {
@@ -29,9 +29,9 @@ MainWindow::MainWindow(QWidget* parent)
     restartBtn.setText(QString("重新开始"));
     preBtn.setParent(this);
     preBtn.setText(QString("上一关"));
-    nextBtn.setGeometry(30, 630, 120, 50);
+    preBtn.setGeometry(30, 630, 120, 50);
     restartBtn.setGeometry(220, 630, 120, 50);
-    preBtn.setGeometry(410, 630, 120, 50);
+    nextBtn.setGeometry(410, 630, 120, 50);
     connect(&nextBtn, SIGNAL(clicked()), this, SLOT(onNextBtnClicked()));
     connect(&restartBtn, SIGNAL(clicked()), this, SLOT(onRestartBtnClicked()));
     connect(&preBtn, SIGNAL(clicked()), this, SLOT(onPreBtnClicked()));
@@ -63,7 +63,8 @@ std::shared_ptr<ICommandNotification> MainWindow::get_CommandSink() noexcept
 
 
 
-void MainWindow::set_ViewMap(std::shared_ptr<int[MAXN*MAXN]> ViewMap) {
+void MainWindow::set_ViewMap(std::shared_ptr<int[]> ViewMap) {
+
     this->viewMap = ViewMap;
 }
 /*
@@ -89,6 +90,8 @@ MainWindow::~MainWindow() {
 }
 
 void MainWindow::paintEvent(QPaintEvent*) {
+    roundLabel.setText(QString("第" + QString::number(level) + "关"));
+    stepLabel.setText(QString("移动次数：" + QString::number(*step)));
     if (*dir == Up)
         playerPixmap = upPixmap;
     else if (*dir == Down)
@@ -104,20 +107,20 @@ void MainWindow::paintEvent(QPaintEvent*) {
     for (int i = 0; i < MAXN; i++) {
         for (int j = 0; j < MAXN; j++) {
             painter.drawPixmap(i * 35, j * 35, 35, 35, blockPixmap);
-            if ((viewMap)[i*MAXN+j] == 2) {
+            if ((viewMap)[i * MAXN + j] == 2) {
                 painter.drawPixmap(i * 35 + 2, j * 35 + 3, 30, 30, aimPixmap);
             }
         }
     }
     for (int i = 0; i < MAXN; i++) {
         for (int j = 0; j < MAXN; j++) {
-            if (viewMap[i*MAXN+j] == 1) {
+            if (viewMap[i * MAXN + j] == 1) {
                 painter.drawPixmap(i * 35, j * 35 - 11, 35, 46, wallPixmap);
             }
-            else if (viewMap[i*MAXN+j] == 3) {
+            else if (viewMap[i * MAXN + j] == 3) {
                 painter.drawPixmap(i * 35, j * 35 - 10, 35, 45, boxPixmap);
             }
-            else if (viewMap[i*MAXN+j] == 4) {
+            else if (viewMap[i * MAXN + j] == 4) {
                 painter.drawPixmap(i * 35 - 7, j * 35 - 27, 50, 62, playerPixmap);
             }
         }
@@ -164,24 +167,24 @@ void MainWindow::keyPressEvent(QKeyEvent* e) {
     default:
         break;
     }
-    update();
+
 }
 
 void MainWindow::onNextBtnClicked() {
     m_cmdSkip->SetParameter(1);
     m_cmdSkip->Exec();
-    update();
+
 }
 
 void MainWindow::onRestartBtnClicked() {
     m_cmdSkip->SetParameter(0);
     m_cmdSkip->Exec();
-    update();
+
 }
 
 void MainWindow::onPreBtnClicked() {
     m_cmdSkip->SetParameter(-1);
     m_cmdSkip->Exec();
-    update();
+
 }
 
